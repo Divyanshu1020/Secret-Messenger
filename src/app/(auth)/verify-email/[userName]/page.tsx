@@ -1,4 +1,7 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { verifySchema } from "@/schema/verifySchema";
 import { ApiResponse } from "@/types/apiResponse";
@@ -48,10 +51,32 @@ export default function Verify() {
           <h1 className=" text-4xl font-extrabold tracking-tight lg:text-5xl">
             Verify your Account
           </h1>
-          <p className=" mb-4">Enter the verification code send to your email</p>
+          <p className=" mb-4">
+            Enter the verification code send to your email
+          </p>
         </div>
         <div>
-               
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Code</FormLabel>
+                    <FormControl>
+                      <Input type="number" maxLength={6}  placeholder="Code" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button type="submit">
+                Submit
+              </Button>
+            </form>
+          </Form>
         </div>
       </div>
     </div>
