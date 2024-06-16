@@ -56,7 +56,7 @@ export default function Component() {
     
      };
 
-
+    }
   return (
     <>
       <div className=" flex justify-center items-center min-h-screen bg-gray-100">
@@ -108,7 +108,7 @@ export default function Component() {
             </Form>
             <div className=" text-center m-4">
               <p>
-                if you don't have an account? <Link href={"/sign-in"} className=" text-blue-500 hover:text-blue-800">Sign Up</Link>
+                if you don&apos;t have an account? <Link href={"/sign-in"} className=" text-blue-500 hover:text-blue-800">Sign Up</Link>
               </p>
             </div>
           </div>
