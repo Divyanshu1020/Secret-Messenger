@@ -16,7 +16,7 @@ export default function Navbar() {
         {
           session ? (
             <>
-              <span> Welcome</span>
+              <span> Welcome, {user.userName || user.email}</span>
               <Button 
                 className=' w-full md:w-auto'
                 onClick={() => signOut()}
