@@ -20,6 +20,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Message } from "@/models/user.model";
+import axios from "axios";
+import { useToast } from "./ui/use-toast";
 
 type MessageCardProps = {
   message: Message;
@@ -29,7 +31,14 @@ export default function MessageCard({
   message,
   deleteMessage,
 }: MessageCardProps) {
-  const handleDeleteButton = async () => {};
+  const {toast} = useToast();
+  const handleDeleteButton = async () => {
+    const response = await axios.delete(`/api/delete-message/${message.id}`);
+    toast({
+      title: response.data.message,
+    })
+    deleteMessage(message.id);
+  };
   return (
     <Card>
       <CardHeader>
