@@ -36,7 +36,7 @@ export default function Component() {
   });
 
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
-    setIsSubmitting(true);
+    // setIsSubmitting(true);
     const result = await signIn("credentials", {
         redirect: false,
         identifier: data.identifier,
@@ -94,7 +94,7 @@ export default function Component() {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="Password" {...field} />
+                        <Input type="text" placeholder="Password" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

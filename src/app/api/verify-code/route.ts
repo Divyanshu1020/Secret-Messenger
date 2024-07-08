@@ -3,10 +3,11 @@ import {default as User} from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import { date } from "zod";
 
-export async function GET(req: NextRequest){
+export async function POST(req: NextRequest){
     await dbConnect()
 
     try {
+        
         const {userName, code} = await req.json();
         if(!userName || !code){
             return NextResponse.json(

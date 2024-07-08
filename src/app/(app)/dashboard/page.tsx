@@ -11,7 +11,9 @@ import { acceptMessageSchema } from "@/schema/acceptMessageSchema";
 import { ApiResponse } from "@/types/apiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
+import { profile } from "console";
 import { Loader2, RefreshCcw } from "lucide-react";
+import { User } from "next-auth";
 import { useSession } from "next-auth/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -84,7 +86,7 @@ export default function Dashboard() {
     if (!session || !session.user) return;
 
     getIsAcceptingInBackend();
-    getAllMessages();
+    // getAllMessages();
   }, [getAllMessages, getIsAcceptingInBackend, session]);
 
   const switchHandler = async () => {
@@ -107,9 +109,13 @@ export default function Dashboard() {
     }
   };
 
+  // const {userName} = session?.user as User
+  const profileLink = `${window.location.protocol}//${window.location.host}/u/${session?.user?.userName}`
+
   const handleDeleteMessage = (messageId: string) => {};
+  
   return (
-    <div className=" my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+    <div className=" my-8 mx-4 md:mx-8 lg:mx-auto p-6  rounded w-full max-w-6xl">
       <h1 className=" text-4xl font-bold mb-4"> User Dashboard</h1>
 
       <div className=" mb-4">
@@ -117,13 +123,11 @@ export default function Dashboard() {
         <div className=" flex items-center">
           <Input
             type="text"
-            value={
-              "http://localhost:3000/dashboard?userName=" + session?.user?.name
-            }
+            value={profileLink}
             disabled
             className=" input input-bordered w-full max-w-lg"
           />
-          <Button>Copy</Button>
+          <Button onClick={() => navigator.clipboard.writeText(profileLink)}>Copy</Button>
         </div>
       </div>
 

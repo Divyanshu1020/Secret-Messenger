@@ -61,21 +61,21 @@ export async function POST(req: NextRequest) {
             await newUser.save();
         }
 
-        const emailResponsce = await sendVerificationEmail(userName, email, verifyCode);
-        console.log("email response", emailResponsce);
+        // const emailResponsce = await sendVerificationEmail(userName, email, verifyCode);
+        // console.log("email response", emailResponsce);
 
-        if(!emailResponsce.success){
-            return NextResponse.json(
-                {
-                    success: false,
-                    message: emailResponsce.message
-                },
-                {
-                    status: 500
+        // if(!emailResponsce.success){
+        //     return NextResponse.json(
+        //         {
+        //             success: false,
+        //             message: emailResponsce.message
+        //         },
+        //         {
+        //             status: 500
 
-                }
-            )
-        }
+        //         }
+        //     )
+        // }
 
         return NextResponse.json(
             {
