@@ -23,9 +23,9 @@ https://katherineoelsner.com/
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here) 
+![App Screenshot](https://github.com/user-attachments/assets/7d9cbc0a-f8c9-459b-bc8c-1f5428c126cf)
 
-![](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![](https://github.com/user-attachments/assets/e427fe6d-543e-4c90-a4e5-892e24f2578a)
 
 
 ## License
