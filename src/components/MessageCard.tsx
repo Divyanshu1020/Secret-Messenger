@@ -1,4 +1,5 @@
 import React from "react";
+import { MdDelete } from "react-icons/md";
 import {
   Card,
   CardContent,
@@ -22,6 +23,7 @@ import {
 import { Message } from "@/models/user.model";
 import axios from "axios";
 import { useToast } from "./ui/use-toast";
+import { format } from 'date-fns';
 
 type MessageCardProps = {
   message: Message;
@@ -31,44 +33,33 @@ export default function MessageCard({
   message,
   deleteMessage,
 }: MessageCardProps) {
-  const {toast} = useToast();
-  const handleDeleteButton = async () => {
-    const response = await axios.delete(`/api/delete-message/${message.id}`);
-    toast({
-      title: response.data.message,
-    })
-    deleteMessage(message.id);
-  };
+  const formattedDate = format(new Date(message.createdAt), 'PPpp')
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          Card Title
+        <CardTitle className=" flex flex-row justify-between">
+          {message.content}
           <AlertDialog>
-            <AlertDialogTrigger>Open</AlertDialogTrigger>
+            <AlertDialogTrigger><MdDelete size={20} /></AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
                   This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  your message and remove your data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={() => {handleDeleteButton()}}>Continue</AlertDialogAction>
+                <AlertDialogAction onClick={() => {deleteMessage(message._id)}}>Continue</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
         </CardTitle>
-        <CardDescription>Card Description</CardDescription>
+        <CardDescription>{formattedDate}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <p>Card Content</p>
-      </CardContent>
-      <CardFooter>
-        <p>Card Footer</p>
-      </CardFooter>
+      
+      
     </Card>
   );
 }

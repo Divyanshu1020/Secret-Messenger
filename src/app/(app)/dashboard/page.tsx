@@ -22,8 +22,13 @@ export default function Dashboard() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitching, setIsSwitching] = useState(false);
+  const [userProfileUrl, setUserProfileUrl] = useState("");
   const { toast } = useToast();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  // if (!session?.user?.userName) {
+  //   return null;
+  // }
 
   const { register, watch, setValue } = useForm({
     resolver: zodResolver(acceptMessageSchema),
@@ -31,6 +36,10 @@ export default function Dashboard() {
 
   const watchIsAccepting = watch("isAccepting");
 
+  const getUserProfileUrl = () => {
+    const profileLink = `${window.location.protocol}//${window.location.host}/u/${session?.user?.userName}`;
+    setUserProfileUrl(profileLink);
+  };
   // Call's to backend
   const getIsAcceptingInBackend = useCallback(async () => {
     setIsSwitching(true);
@@ -59,6 +68,7 @@ export default function Dashboard() {
 
         const response = await axios.get<ApiResponse>("/api/get-messages");
         setMessages(response.data.messages || []);
+        console.log(response.data.messages);
 
         if (refresh) {
           toast({
@@ -83,11 +93,20 @@ export default function Dashboard() {
   );
 
   useEffect(() => {
-    if (!session || !session.user) return;
+    if (status !== "authenticated") return;
+    console.log("render");
+    // getIsAcceptingInBackend();
+    getAllMessages();
+    const profileLink = `${window.location.protocol}//${window.location.host}/u/`;
+    console.log("profileLink", profileLink);
+    setUserProfileUrl(profileLink);
+  }, [getAllMessages, getIsAcceptingInBackend, status]);
 
-    getIsAcceptingInBackend();
-    // getAllMessages();
-  }, [getAllMessages, getIsAcceptingInBackend, session]);
+  // useCallback(() => {
+  //   const profileLink = `${window.location.protocol}//${window.location.host}/u/${session?.user?.userName}`
+  //   console.log("profileLink", profileLink);
+  //   setUserProfileUrl(profileLink)
+  // },[session])
 
   const switchHandler = async () => {
     try {
@@ -110,12 +129,37 @@ export default function Dashboard() {
   };
 
   // const {userName} = session?.user as User
-  const profileLink = `${window.location.protocol}//${window.location.host}/u/${session?.user?.userName}`
 
-  const handleDeleteMessage = (messageId: string) => {};
-  
+  const handleDeleteMessage = async (messageId: string) => {
+    try {
+      console.log("messageId", messageId);
+      const response = await axios.delete<ApiResponse>(
+        `/api/delete-message/${messageId}`
+      );
+      if (response.status === 200) {
+        const updatedMessages = messages.filter(
+          (message) => message._id !== messageId
+        );
+        setMessages(updatedMessages);
+        toast({
+          title: "Success",
+          description: "Deleted message",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiResponse>;
+      toast({
+        title: "Error",
+        description:
+          axiosError.response?.data.message || "Error Deleting messages",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
-    <div className=" my-8 mx-4 md:mx-8 lg:mx-auto p-6  rounded w-full max-w-6xl">
+    <div className=" my-8  lg:mx-auto p-6  rounded w-full max-w-6xl">
       <h1 className=" text-4xl font-bold mb-4"> User Dashboard</h1>
 
       <div className=" mb-4">
@@ -123,11 +167,19 @@ export default function Dashboard() {
         <div className=" flex items-center">
           <Input
             type="text"
-            value={profileLink}
+            value={`${userProfileUrl}${session?.user?.userName}`}
             disabled
             className=" input input-bordered w-full max-w-lg"
           />
-          <Button onClick={() => navigator.clipboard.writeText(profileLink)}>Copy</Button>
+          <Button
+            onClick={() =>
+              navigator.clipboard.writeText(
+                `${userProfileUrl}${session?.user?.userName}`
+              )
+            }
+          >
+            Copy
+          </Button>
         </div>
       </div>
 
@@ -145,9 +197,15 @@ export default function Dashboard() {
         </Label>
       </div>
 
-      <Separator />
+      <Separator className=" my-5" />
 
-      <Button className=" mt-4" variant={"outline"} onClick={() => {}}>
+      <Button
+        className=""
+        variant={"outline"}
+        onClick={() => {
+          getAllMessages();
+        }}
+      >
         {isLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
         ) : (
@@ -156,13 +214,19 @@ export default function Dashboard() {
       </Button>
 
       <div className=" mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {messages.length > 0 ?(messages.map((message) => (
-          <MessageCard
-            key={message.id}
-            message={message}
-            deleteMessage={handleDeleteMessage}
-          />
-        ))):(<><p> No Messages to display </p></>)}
+        {messages.length > 0 ? (
+          messages.map((message) => (
+            <MessageCard
+              key={message._id}
+              message={message}
+              deleteMessage={handleDeleteMessage}
+            />
+          ))
+        ) : (
+          <>
+            <p> No Messages to display </p>
+          </>
+        )}
       </div>
     </div>
   );

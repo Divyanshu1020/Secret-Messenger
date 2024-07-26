@@ -18,7 +18,7 @@ export default function Navbar() {
             <>
               <span> Welcome, {user.userName || user.email}</span>
               <Button 
-                className=' w-full md:w-auto'
+                className=' w-auto'
                 onClick={() => signOut()}
               >Logout</Button>
             </>

@@ -65,7 +65,7 @@ export default function Component() {
             <h1 className=" text-4xl font-extrabold tracking-tight lg:text-5xl">
               Anonymous Messageing App
             </h1>
-            <p className=" mb-4">SignIn with your account</p>
+            <p className=" mb-4">Sign In with your account</p>
           </div>
           <div>
             <Form {...form}>
@@ -108,7 +108,7 @@ export default function Component() {
             </Form>
             <div className=" text-center m-4">
               <p>
-                if you don&apos;t have an account? <Link href={"/sign-in"} className=" text-blue-500 hover:text-blue-800">Sign Up</Link>
+                if you don&apos;t have an account? <Link href={"/sign-up"} className=" text-blue-500 hover:text-blue-800">Sign Up</Link>
               </p>
             </div>
           </div>

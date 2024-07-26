@@ -11,13 +11,14 @@ const UserNameValidationSchema = z.object({
 })
 
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
     await dbConnect();
 
     try {
 
-        const searchParams = new URL(req.url).searchParams;
-        const userName = searchParams.get("userName");
+        // const searchParams = new URL(req.url).searchParams;
+        // const userName = searchParams.get("userName");
+        const {userName} = await req.json();
         const userNameValidation = UserNameValidationSchema.safeParse({userName});
 
         console.log("userNameValidation", userNameValidation);

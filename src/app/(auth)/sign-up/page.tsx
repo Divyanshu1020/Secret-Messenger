@@ -71,8 +71,8 @@ export default function Component() {
         setCheckingUserName(true);
         setBackendMessage("");
         try {
-          const response = await axios.get(
-            `/api/check-username-availability?userName=${userName}`
+          const response = await axios.post(
+            `/api/check-username-availability?userName=${userName}`,{userName}
           );
 
           setBackendMessage(response.data.message);

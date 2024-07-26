@@ -52,7 +52,7 @@ export default function Verify() {
             Verify your Account
           </h1>
           <p className=" mb-4">
-            Enter the verification code send to your email
+            Enter the verification code send to your email or use 111111
           </p>
         </div>
         <div>
